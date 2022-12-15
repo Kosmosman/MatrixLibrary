@@ -1,6 +1,6 @@
 #include "s21_matrix.h"
 
-/// @brief Создание матрицы
+/// @brief Создание матрицы.
 /// @param rows Строки
 /// @param columns Стобцы
 /// @param result Структура матрицы
@@ -9,13 +9,13 @@
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
   int output = CORRECT_MATRIX;
   s21_zero_matrix(result);
-  if (rows && columns) {
+  if (rows > 0 && columns > 0) {
     result->rows = rows;
     result->columns = columns;
     result->matrix = NULL;
     result->matrix = (double **)calloc(rows, sizeof(double *));
     if (result->matrix != NULL) {
-      for (int i = 0; i < columns && !output; i++) {
+      for (int i = 0; i < rows && !output; i++) {
         result->matrix[i] = (double *)calloc(columns, sizeof(double));
         if (result->matrix[i] == NULL) {
           for (int j = 0; j < i; j++) {
@@ -34,7 +34,7 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
   return output;
 }
 
-/// @brief Очистка матрицы
+/// @brief Очистка выделенной памяти под матрицу.
 /// @param A Указатель на структуру матрицы
 void s21_remove_matrix(matrix_t *A) {
   if (A->matrix != NULL) {
@@ -47,7 +47,7 @@ void s21_remove_matrix(matrix_t *A) {
   }
 }
 
-/// @brief Сравнение двух матриц
+/// @brief Сравнение двух матриц.
 /// @param A
 /// @param B
 /// @return
@@ -55,7 +55,7 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
   int result = SUCCESS;
   if (A->columns != B->columns || A->rows != B->rows) {
     result = FAILURE;
-  } else if (!(A->columns) || !(A->rows)) {
+  } else if (A->columns <= 0 && A->rows <= 0) {
     result = FAILURE;
   } else {
     for (int i = 0; i < A->rows && result; i++) {
@@ -69,14 +69,13 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
   return result;
 }
 
-/// @brief Сумма двух матриц
+/// @brief Сумма двух матриц.
 /// @param A
 /// @param B
 /// @param result
 /// @return
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
-  int res = CORRECT_MATRIX;
-  res = s21_matrices_validation_sizes(*A, *B);
+  int res = s21_check_matrices_with_result(*A, *B, result, A->rows, A->columns);
   if (!res) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
@@ -87,14 +86,13 @@ int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   return res;
 }
 
-/// @brief Разница двух матриц
+/// @brief Разница двух матриц.
 /// @param A
 /// @param B
 /// @param result
 /// @return
 int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
-  int res = CORRECT_MATRIX;
-  res = s21_matrices_validation_sizes(*A, *B);
+  int res = s21_check_matrices_with_result(*A, *B, result, A->rows, A->columns);
   if (!res) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
@@ -105,14 +103,15 @@ int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   return res;
 }
 
-/// @brief Произведение матрицы на число
+/// @brief Произведение матрицы на число.
 /// @param A
 /// @param number
 /// @param result
 /// @return
 int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
-  int res = CORRECT_MATRIX;
-  res = s21_matrix_validation(*A);
+  int res = s21_matrix_validation(*A);
+  s21_zero_matrix(result);
+  if (!res) res = s21_create_matrix(A->rows, A->columns, result);
   if (!res) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
@@ -123,14 +122,16 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
   return res;
 }
 
-/// @brief Умножение матриц
+/// @brief Умножение матриц.
 /// @param A
 /// @param B
 /// @param result
-/// @return
+/// @return Стандартный вывод ошибок.
 int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   int res = CORRECT_MATRIX;
+  s21_zero_matrix(result);
   res = !(A->columns == B->rows);
+  if (!res) s21_create_matrix(A->rows, B->columns, result);
   if (!res) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < B->columns; j++) {
@@ -143,13 +144,15 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   return res;
 }
 
-/// @brief Транспонирование матрицы
+/// @brief Транспонирование матрицы.
 /// @param A
 /// @param result
-/// @return
+/// @return Стандартный вывод ошибок.
 int s21_transpose(matrix_t *A, matrix_t *result) {
-  int res = CORRECT_MATRIX;
-  if (A->rows == result->columns && A->columns == result->rows) {
+  int res = s21_matrix_validation(*A);
+  s21_zero_matrix(result);
+  if (!res) s21_create_matrix(A->columns, A->rows, result);
+  if (!res) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
         A->matrix[i][j] = result->matrix[j][i];
@@ -159,28 +162,37 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
   return res;
 }
 
+/// @brief Вычисление матрицы алгебраических дополнений
+/// @param A
+/// @param result
+/// @return
 int s21_calc_complements(matrix_t *A, matrix_t *result) {
-  int res = CORRECT_MATRIX, res1 = CORRECT_MATRIX;
+  // Доделать ошибки, если матрица не квадратная и однокомпанентная
+  int res = CORRECT_MATRIX;
   double minor = 0;
   matrix_t tmp = {0};
-  res = s21_matrices_validation_sizes(*A, *result);
-  res1 = s21_create_matrix(A->rows - 1, A->columns - 1, &tmp);
-  if (!res && !res1) {
+  res = s21_matrix_validation(*A);
+  if (!res) res = s21_create_matrix(A->rows, A->columns, result);
+  if (!res) res = s21_create_matrix(A->rows, A->columns, &tmp);
+  if (!res) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
         s21_decrease_matrix(*A, &tmp, i, j);
         res = s21_determinant(&tmp, &minor);
         if ((i + j) % 2) minor = -minor;
         result->matrix[i][j] = minor;
-        s21_print_matrix(*result);
         minor = 0;
       }
     }
-    s21_zero_matrix(&tmp);
+    s21_remove_matrix(&tmp);
   }
   return res;
 }
 
+/// @brief Вычисление детерминанта матрицы (метод Гауса)
+/// @param A
+/// @param result
+/// @return
 int s21_determinant(matrix_t *A, double *result) {
   int res = CORRECT_MATRIX, state = 0, flag = 0, num = 0, zero = 0;
   double num_const = 0, mul = 1;
@@ -223,7 +235,7 @@ int s21_determinant(matrix_t *A, double *result) {
 /* -------------------- ADDITIONAL FUNCTIONS ------------------------- */
 
 /// @brief Зануление всех элементов матрицы (необходимо для обработки ситуаций,
-/// когда передаются неинициализированные структуры матриц)
+/// когда передаются неинициализированные структуры матриц).
 /// @param A
 void s21_zero_matrix(matrix_t *A) {
   A->matrix = NULL;
@@ -234,15 +246,43 @@ void s21_zero_matrix(matrix_t *A) {
 /// @brief Определение эквивалентности размеров двух матриц и их корректности
 /// @param A
 /// @param B
-/// @return
+/// @return Возвращает 0 в случае корректных матриц. Возвращает 1 в случае, если
+/// одна параметры матриц меньше или равны нулю, или если указатели на двумерные
+/// массивы указывают на NULL. Возвращает 2, если матрицы несовпадающего
+/// размера.
 int s21_matrices_validation_sizes(matrix_t A, matrix_t B) {
   int res = CORRECT_MATRIX;
-  if (A.columns != B.columns || A.rows != B.rows) res = CALCULATION_ERROR;
+  if (A.columns <= 0 || A.rows <= 0 || B.columns <= 0 || B.rows <= 0)
+    res = INCORRECT_MATRIX;
+  else if (A.matrix == NULL || B.matrix == NULL)
+    res = INCORRECT_MATRIX;
+  else if (A.columns != B.columns || A.rows != B.rows)
+    res = CALCULATION_ERROR;
+  return res;
+}
+
+/// @brief Проверяет входные матрицы на корректность, после чего создает матрицу
+/// result с последующей проверкой
+/// @param A
+/// @param B
+/// @param result
+/// @param row
+/// @param column
+/// @return
+int s21_check_matrices_with_result(matrix_t A, matrix_t B, matrix_t *result,
+                                   int row, int column) {
+  int res = CORRECT_MATRIX;
+  s21_zero_matrix(result);
+  res = s21_matrices_validation_sizes(A, B);
+  if (!res) {
+    res = s21_create_matrix(row, column, result);
+    if (res) s21_zero_matrix(result);
+  }
   return res;
 }
 
 /// @brief Проверка матрицы накорректность (стороны не равны 0 и матрица не
-/// указывает на NULL)
+/// указывает на NULL).
 /// @param A
 /// @param B
 /// @return
@@ -252,7 +292,7 @@ int s21_matrix_validation(matrix_t A) {
   return res;
 }
 
-/// @brief Зануление элементов матрицы
+/// @brief Заполнение матрицы нулями
 /// @param A
 void s21_fill_zero_matrix(matrix_t *A) {
   for (int i = 0; i < A->rows; i++) {
@@ -292,7 +332,7 @@ int s21_switch_rows(matrix_t *A, int row_1) {
 }
 
 /// @brief Нахождение детерминанта путем перемножения членов треугольной
-/// матрицы, находящихся на главной диагонали
+/// матрицы, находящихся на главной диагонали.
 /// @param A
 /// @param mul
 /// @return
@@ -304,7 +344,7 @@ double s21_triangle_determinant(matrix_t A, double mul) {
   return res / mul;
 }
 
-/// @brief Заполнение матрицы с вычеркнутыми строкой и столбцом
+/// @brief Заполнение матрицы с вычеркнутыми строкой и столбцом.
 /// @param A
 /// @param row
 /// @param column
@@ -323,28 +363,28 @@ void s21_decrease_matrix(matrix_t A, matrix_t *B, int row, int column) {
     }
 }
 
-int main(void) {
-  matrix_t A = {0};
-  s21_create_matrix(3, 3, &A);
-  A.matrix[0][0] = 1;
-  A.matrix[0][1] = 2;
-  A.matrix[0][2] = 3;
-  A.matrix[1][0] = 0;
-  A.matrix[1][1] = 4;
-  A.matrix[1][2] = 2;
-  A.matrix[2][0] = 5;
-  A.matrix[2][1] = 2;
-  A.matrix[2][2] = 1;
-  s21_print_matrix(A);
-  printf("\n");
-  matrix_t B = {0};
-  s21_create_matrix(3, 3, &B);
-  s21_calc_complements(&A, &B);
-  printf("\n");
-  s21_remove_matrix(&A);
-  s21_remove_matrix(&B);
-  return 0;
-}
+// int main(void) {
+//   matrix_t A = {0};
+//   s21_create_matrix(3, 3, &A);
+//   A.matrix[0][0] = 1;
+//   A.matrix[0][1] = 2;
+//   A.matrix[0][2] = 3;
+//   A.matrix[1][0] = 0;
+//   A.matrix[1][1] = 4;
+//   A.matrix[1][2] = 2;
+//   A.matrix[2][0] = 5;
+//   A.matrix[2][1] = 2;
+//   A.matrix[2][2] = 1;
+//   s21_print_matrix(A);
+//   printf("\n");
+//   matrix_t B = {0};
+//   s21_create_matrix(3, 3, &B);
+//   s21_calc_complements(&A, &B);
+//   printf("\n");
+//   s21_remove_matrix(&A);
+//   s21_remove_matrix(&B);
+//   return 0;
+// }
 
 void s21_print_matrix(matrix_t A) {
   for (int i = 0; i < A.rows; i++) {

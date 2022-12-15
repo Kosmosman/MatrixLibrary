@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c11 -Wall -Wextra -Werror
+CFLAGS = -std=c11 -Wall -Wextra -Werror #-g -fsanitize=address
 TST_CFLAGS = -g $(CFLAGS)
 CLIBS = -lcheck
 LIBNAME = s21_matrix.a

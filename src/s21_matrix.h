@@ -5,7 +5,9 @@
 #define FAILURE 0
 #define CORRECT_MATRIX 0
 #define INCORRECT_MATRIX 1
+#define CALC_ERROR 2
 #define CALCULATION_ERROR 2
+#define OK 0
 
 #include <check.h>
 #include <stdio.h>
@@ -38,5 +40,7 @@ void s21_print_matrix(matrix_t A);
 double s21_triangle_determinant(matrix_t A, double mul);
 int s21_switch_rows(matrix_t *A, int row_1);
 void s21_decrease_matrix(matrix_t A, matrix_t *B, int row, int column);
+int s21_check_matrices_with_result(matrix_t A, matrix_t B, matrix_t *result,
+                                   int row, int column);
 
 #endif  // SRC_MATRIX_H

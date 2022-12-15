@@ -10,6 +10,8 @@
 Suite *create_matrix(void);
 Suite *remove_matrix(void);
 Suite *determinant_matrix(void);
+Suite *eq_matrix(void);
+Suite *sum_matrix(void);
 
 void run_testcase(Suite *testcase);
 void run_tests(void);

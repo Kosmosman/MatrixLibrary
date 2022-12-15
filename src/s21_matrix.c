@@ -152,43 +152,39 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
 }
 
 int s21_determinant(matrix_t *A, double *result) {
-  int res = CORRECT_MATRIX, mul = 1, sign = 1, state = 0, flag = 0, num = 0,
-      zero = 0;
+  int res = CORRECT_MATRIX, state = 0, flag = 0, num = 0, zero = 0;
+  double num_const = 0, mul = 1;
   res = s21_matrix_validation(*A);
   *result = 0;
   if (!res) {
-    for (int i = 0; i < A->rows && !zero; i++) {
-      if (num = s21_switch_rows(A, i)) {
-        if (num == 2) mul *= -1;
-        for (int j = i; j < A->rows - 1; j++) {
-          // Находим первое вхождение строки с ненулевым i-м элементом
-          if (!state && A->matrix[j][i]) {
-            state = j;
-            flag = 1;
-          }
-          if (flag) {
-            if ((A->matrix[state][i] > 0 && A->matrix[j + 1][i] > 0) ||
-                (A->matrix[state][i] < 0 && A->matrix[j + 1][i] < 0))
-              sign = -1;
-            printf("mul = %d\n", mul);
-            if (A->matrix[j + 1][i] != 0) {
-              mul *= A->matrix[state][i];
-              num = A->matrix[j + 1][i];
+    if (A->columns > 1) {
+      for (int i = 0; i < A->rows && !zero; i++) {
+        if ((num = s21_switch_rows(A, i))) {
+          if (num == 2) mul *= -1;
+          for (int j = i; j < A->rows - 1; j++) {
+            // Находим первое вхождение строки с ненулевым i-м элементом
+            if (!state && A->matrix[j][i]) {
+              state = j;
+              flag = 1;
+            }
+            if (flag && A->matrix[j + 1][i] != 0) {
+              mul = mul * A->matrix[state][i];
+              num_const = A->matrix[j + 1][i];
               for (int k = i; k < A->columns; k++) {
                 A->matrix[j + 1][k] =
-                    A->matrix[j + 1][k] * A->matrix[state][i] +
-                    A->matrix[state][k] * sign * num;
-                s21_print_matrix(*A);
+                    A->matrix[j + 1][k] * A->matrix[state][i] -
+                    A->matrix[state][k] * num_const;
               }
             }
           }
-          sign = 1;
+          flag = 0;
+          state = 0;
+        } else {
+          zero = 1;
         }
-        flag = 0;
-        state = 0;
-      } else {
-        zero = 1;
       }
+    } else {
+      *result = A->matrix[0][0];
     }
   }
   if (!zero) *result = s21_triangle_determinant(*A, mul);
@@ -256,27 +252,33 @@ int s21_switch_rows(matrix_t *A, int row_1) {
   return res;
 }
 
-double s21_triangle_determinant(matrix_t A, int mul) {
+double s21_triangle_determinant(matrix_t A, double mul) {
   double res = 1;
   for (int i = 0; i < A.rows; i++) {
     res *= A.matrix[i][i];
   }
-  printf("mul = %d\n", mul);
   return res / mul;
 }
 
 int main(void) {
   matrix_t A = {0};
-  s21_create_matrix(3, 3, &A);
-  A.matrix[0][0] = 2;
-  A.matrix[0][1] = 5;
-  A.matrix[0][2] = 6;
-  A.matrix[1][0] = 8;
-  A.matrix[1][1] = 3;
-  A.matrix[1][2] = 9;
-  A.matrix[2][0] = 0;
-  A.matrix[2][1] = 1;
-  A.matrix[2][2] = 1;
+  s21_create_matrix(4, 4, &A);
+  A.matrix[0][0] = 21.42;
+  A.matrix[0][1] = 11.2;
+  A.matrix[0][2] = 13.8;
+  A.matrix[0][3] = 123.12;
+  A.matrix[1][0] = 0;
+  A.matrix[1][1] = 12.22;
+  A.matrix[1][2] = 44.12;
+  A.matrix[1][3] = 17.1;
+  A.matrix[2][0] = -11.12;
+  A.matrix[2][1] = 3.02;
+  A.matrix[2][2] = 66.7;
+  A.matrix[2][3] = 15.16;
+  A.matrix[3][0] = -2.26;
+  A.matrix[3][1] = -0.007;
+  A.matrix[3][2] = 13.87;
+  A.matrix[3][3] = 1.34;
   s21_print_matrix(A);
   printf("\n");
   double res = 0;

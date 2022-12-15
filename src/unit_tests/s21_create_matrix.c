@@ -40,7 +40,7 @@ END_TEST
 Suite *create_matrix(void) {
   Suite *s = {0};
   TCase *tc = {0};
-  s = suite_create("suite_matrix");
+  s = suite_create("create_matrix");
   tc = tcase_create("create_matrix");
 
   tcase_add_test(tc, create_zero_matrix);

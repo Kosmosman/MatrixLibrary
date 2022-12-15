@@ -35,7 +35,7 @@ int s21_matrices_validation_sizes(matrix_t A, matrix_t B);
 int s21_matrix_validation(matrix_t A);
 void s21_zero_matrix(matrix_t *A);
 void s21_print_matrix(matrix_t A);
-double s21_triangle_determinant(matrix_t A, int mul);
+double s21_triangle_determinant(matrix_t A, double mul);
 int s21_switch_rows(matrix_t *A, int row_1);
 
 #endif  // SRC_MATRIX_H

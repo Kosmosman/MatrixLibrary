@@ -16,6 +16,7 @@ START_TEST(zero_matrix) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(0, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -35,6 +36,7 @@ START_TEST(casual_matrix) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(0, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -54,6 +56,7 @@ START_TEST(casual_matrix_1) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(0, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -73,6 +76,7 @@ START_TEST(casual_matrix_2) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(-4.0, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -92,6 +96,7 @@ START_TEST(casual_matrix_negative_3) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(-502.0, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -111,6 +116,7 @@ START_TEST(casual_matrix_4) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(462.05612, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -130,6 +136,7 @@ START_TEST(casual_matrix_5) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(0.019, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -144,6 +151,7 @@ START_TEST(casual_matrix_6) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(8.6345, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -155,6 +163,7 @@ START_TEST(casual_matrix_7) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(21.425, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 
@@ -181,6 +190,7 @@ START_TEST(casual_matrix_8) {
   int error = s21_determinant(&A, &res);
   ck_assert_double_eq_tol(-54206.8204245137, res, 1e-7);
   ck_assert_int_eq(0, error);
+  s21_remove_matrix(&A);
 }
 END_TEST
 

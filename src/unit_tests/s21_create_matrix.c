@@ -7,6 +7,20 @@ START_TEST(create_zero_matrix) {
 }
 END_TEST
 
+START_TEST(create_zero_matrix_1) {
+  matrix_t matrix = {0};
+  int result = s21_create_matrix(2, 0, &matrix);
+  ck_assert_int_eq(1, result);
+}
+END_TEST
+
+START_TEST(create_zero_matrix_2) {
+  matrix_t matrix = {0};
+  int result = s21_create_matrix(0, 2, &matrix);
+  ck_assert_int_eq(1, result);
+}
+END_TEST
+
 START_TEST(create_size_one_matrix) {
   matrix_t matrix = {0};
   int result = s21_create_matrix(1, 1, &matrix);
@@ -37,6 +51,18 @@ START_TEST(create_non_square_matrix) {
 }
 END_TEST
 
+START_TEST(create_abnormal_matrix) {
+  double **m = malloc(sizeof(double **));
+  matrix_t matrix = {m, 0, 0};
+  int result = s21_create_matrix(5, 3, &matrix);
+  ck_assert_int_eq(0, result);
+  ck_assert_int_eq(3, matrix.columns);
+  ck_assert_int_eq(5, matrix.rows);
+  s21_remove_matrix(&matrix);
+  free(m);
+}
+END_TEST
+
 Suite *create_matrix(void) {
   Suite *s = {0};
   TCase *tc = {0};
@@ -44,9 +70,12 @@ Suite *create_matrix(void) {
   tc = tcase_create("create_matrix");
 
   tcase_add_test(tc, create_zero_matrix);
+  tcase_add_test(tc, create_zero_matrix_1);
+  tcase_add_test(tc, create_zero_matrix_2);
   tcase_add_test(tc, create_size_one_matrix);
   tcase_add_test(tc, create_size_ten_matrix);
   tcase_add_test(tc, create_non_square_matrix);
+  tcase_add_test(tc, create_abnormal_matrix);
 
   suite_add_tcase(s, tc);
   return s;

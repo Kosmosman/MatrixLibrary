@@ -8,6 +8,7 @@
 #include "../s21_matrix.h"
 
 Suite *create_matrix(void);
+Suite *remove_matrix(void);
 Suite *determinant_matrix(void);
 
 void run_testcase(Suite *testcase);

@@ -1,7 +1,8 @@
 #include "s21_matrix_test.h"
 
 void run_tests(void) {
-  Suite *list_cases[] = {create_matrix(), determinant_matrix(), NULL};
+  Suite *list_cases[] = {create_matrix(), remove_matrix(), determinant_matrix(),
+                         NULL};
   for (Suite **current_testcase = list_cases; *current_testcase != NULL;
        current_testcase++) {
     run_testcase(*current_testcase);

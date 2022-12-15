@@ -4,12 +4,15 @@
 /// @param rows Строки
 /// @param columns Стобцы
 /// @param result Структура матрицы
-/// @return
+/// @return Возвращает 0 в случае успешного создания. 1 - в случае ошибки при
+/// создании
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
   int output = CORRECT_MATRIX;
+  s21_zero_matrix(result);
   if (rows && columns) {
     result->rows = rows;
     result->columns = columns;
+    result->matrix = NULL;
     result->matrix = (double **)calloc(rows, sizeof(double *));
     if (result->matrix != NULL) {
       for (int i = 0; i < columns && !output; i++) {
@@ -30,13 +33,18 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
   }
   return output;
 }
+
 /// @brief Очистка матрицы
 /// @param A Указатель на структуру матрицы
 void s21_remove_matrix(matrix_t *A) {
-  for (int i = 0; i < A->rows; i++) {
-    free(A->matrix[i]);
+  if (A->matrix != NULL) {
+    for (int i = 0; i < A->rows; i++) {
+      free(A->matrix[i]);
+      A->matrix[i] = NULL;
+    }
+    free(A->matrix);
+    s21_zero_matrix(A);
   }
-  free(A->matrix);
 }
 
 /// @brief Сравнение двух матриц
@@ -151,6 +159,28 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
   return res;
 }
 
+int s21_calc_complements(matrix_t *A, matrix_t *result) {
+  int res = CORRECT_MATRIX, res1 = CORRECT_MATRIX;
+  double minor = 0;
+  matrix_t tmp = {0};
+  res = s21_matrices_validation_sizes(*A, *result);
+  res1 = s21_create_matrix(A->rows - 1, A->columns - 1, &tmp);
+  if (!res && !res1) {
+    for (int i = 0; i < A->rows; i++) {
+      for (int j = 0; j < A->columns; j++) {
+        s21_decrease_matrix(*A, &tmp, i, j);
+        res = s21_determinant(&tmp, &minor);
+        if ((i + j) % 2) minor = -minor;
+        result->matrix[i][j] = minor;
+        s21_print_matrix(*result);
+        minor = 0;
+      }
+    }
+    s21_zero_matrix(&tmp);
+  }
+  return res;
+}
+
 int s21_determinant(matrix_t *A, double *result) {
   int res = CORRECT_MATRIX, state = 0, flag = 0, num = 0, zero = 0;
   double num_const = 0, mul = 1;
@@ -162,13 +192,12 @@ int s21_determinant(matrix_t *A, double *result) {
         if ((num = s21_switch_rows(A, i))) {
           if (num == 2) mul *= -1;
           for (int j = i; j < A->rows - 1; j++) {
-            // Находим первое вхождение строки с ненулевым i-м элементом
             if (!state && A->matrix[j][i]) {
               state = j;
               flag = 1;
             }
             if (flag && A->matrix[j + 1][i] != 0) {
-              mul = mul * A->matrix[state][i];
+              mul *= A->matrix[state][i];
               num_const = A->matrix[j + 1][i];
               for (int k = i; k < A->columns; k++) {
                 A->matrix[j + 1][k] =
@@ -193,29 +222,39 @@ int s21_determinant(matrix_t *A, double *result) {
 
 /* -------------------- ADDITIONAL FUNCTIONS ------------------------- */
 
-/// @brief Определение эквивалентности размеров двух матриц
+/// @brief Зануление всех элементов матрицы (необходимо для обработки ситуаций,
+/// когда передаются неинициализированные структуры матриц)
+/// @param A
+void s21_zero_matrix(matrix_t *A) {
+  A->matrix = NULL;
+  A->columns = 0;
+  A->rows = 0;
+}
+
+/// @brief Определение эквивалентности размеров двух матриц и их корректности
 /// @param A
 /// @param B
 /// @return
 int s21_matrices_validation_sizes(matrix_t A, matrix_t B) {
-  int res = s21_matrix_validation(A);
+  int res = CORRECT_MATRIX;
   if (A.columns != B.columns || A.rows != B.rows) res = CALCULATION_ERROR;
   return res;
 }
 
-/// @brief Определение, не является ли одна из сторон матрицы нулевого размера
+/// @brief Проверка матрицы накорректность (стороны не равны 0 и матрица не
+/// указывает на NULL)
 /// @param A
 /// @param B
 /// @return
 int s21_matrix_validation(matrix_t A) {
   int res = CORRECT_MATRIX;
-  if (!A.columns || !A.rows) res = INCORRECT_MATRIX;
+  if (!A.columns || !A.rows || A.matrix == NULL) res = INCORRECT_MATRIX;
   return res;
 }
 
 /// @brief Зануление элементов матрицы
 /// @param A
-void s21_zero_matrix(matrix_t *A) {
+void s21_fill_zero_matrix(matrix_t *A) {
   for (int i = 0; i < A->rows; i++) {
     for (int j = 0; j < A->columns; j++) {
       A->matrix[i][j] = 0;
@@ -252,6 +291,11 @@ int s21_switch_rows(matrix_t *A, int row_1) {
   return res;
 }
 
+/// @brief Нахождение детерминанта путем перемножения членов треугольной
+/// матрицы, находящихся на главной диагонали
+/// @param A
+/// @param mul
+/// @return
 double s21_triangle_determinant(matrix_t A, double mul) {
   double res = 1;
   for (int i = 0; i < A.rows; i++) {
@@ -260,32 +304,45 @@ double s21_triangle_determinant(matrix_t A, double mul) {
   return res / mul;
 }
 
+/// @brief Заполнение матрицы с вычеркнутыми строкой и столбцом
+/// @param A
+/// @param row
+/// @param column
+/// @return Возвращает матрицу
+void s21_decrease_matrix(matrix_t A, matrix_t *B, int row, int column) {
+  int i_result = 0, j_result = 0;
+  for (int i = 0; i < A.rows; i++)
+    if (i != row) {
+      for (int j = 0; j < A.columns; j++) {
+        if (j != column) {
+          B->matrix[i_result][j_result++] = A.matrix[i][j];
+        }
+      }
+      j_result = 0;
+      i_result++;
+    }
+}
+
 int main(void) {
   matrix_t A = {0};
-  s21_create_matrix(4, 4, &A);
-  A.matrix[0][0] = 21.42;
-  A.matrix[0][1] = 11.2;
-  A.matrix[0][2] = 13.8;
-  A.matrix[0][3] = 123.12;
+  s21_create_matrix(3, 3, &A);
+  A.matrix[0][0] = 1;
+  A.matrix[0][1] = 2;
+  A.matrix[0][2] = 3;
   A.matrix[1][0] = 0;
-  A.matrix[1][1] = 12.22;
-  A.matrix[1][2] = 44.12;
-  A.matrix[1][3] = 17.1;
-  A.matrix[2][0] = -11.12;
-  A.matrix[2][1] = 3.02;
-  A.matrix[2][2] = 66.7;
-  A.matrix[2][3] = 15.16;
-  A.matrix[3][0] = -2.26;
-  A.matrix[3][1] = -0.007;
-  A.matrix[3][2] = 13.87;
-  A.matrix[3][3] = 1.34;
+  A.matrix[1][1] = 4;
+  A.matrix[1][2] = 2;
+  A.matrix[2][0] = 5;
+  A.matrix[2][1] = 2;
+  A.matrix[2][2] = 1;
   s21_print_matrix(A);
   printf("\n");
-  double res = 0;
-  s21_determinant(&A, &res);
+  matrix_t B = {0};
+  s21_create_matrix(3, 3, &B);
+  s21_calc_complements(&A, &B);
   printf("\n");
-  printf("%lf\n", res);
   s21_remove_matrix(&A);
+  s21_remove_matrix(&B);
   return 0;
 }
 

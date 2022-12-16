@@ -17,6 +17,7 @@ Suite *suite_transpose_matrix(void);
 Suite *suite_calc_complements(void);
 Suite *suite_determinant(void);
 Suite *suite_inverse_matrix(void);
+Suite *remove_matrix(void);
 
 void run_test(void);
 void run_testcase(Suite *testcase);

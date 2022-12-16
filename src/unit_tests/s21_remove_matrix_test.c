@@ -1,4 +1,4 @@
-#include "s21_matrix_test.h"
+#include "s21_test_matrix.h"
 
 START_TEST(remove_null_matrix) {
   matrix_t A = {NULL, 0, 0};

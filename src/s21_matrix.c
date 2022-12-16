@@ -269,6 +269,7 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
           if (!res) {
             res = s21_transpose(&tmp, result);
             s21_fill_zero_matrix(&tmp);
+            s21_remove_matrix(&tmp);
             s21_mult_number(result, 1.0 / det, &tmp);
             s21_copy_matrix(&tmp, result);
             s21_remove_matrix(&tmp);
@@ -424,55 +425,4 @@ void s21_copy_matrix(matrix_t *A, matrix_t *B) {
       B->matrix[i][j] = A->matrix[i][j];
     }
   }
-}
-
-// int main(void) {
-//   matrix_t m = {0};
-//   matrix_t expected = {0};
-//   s21_create_matrix(3, 3, &m);
-//   s21_create_matrix(3, 3, &expected);
-//   m.matrix[0][0] = 2;
-//   m.matrix[0][1] = 4;
-//   m.matrix[0][2] = 0;
-
-//   m.matrix[1][0] = 0;
-//   m.matrix[1][1] = 4;
-//   m.matrix[1][2] = 2;
-
-//   m.matrix[2][0] = 4;
-//   m.matrix[2][1] = 8;
-//   m.matrix[2][2] = 4;
-
-//   expected.matrix[0][0] = 0;
-//   expected.matrix[0][1] = -0.5;
-//   expected.matrix[0][2] = 0.25;
-
-//   expected.matrix[1][0] = 0.25;
-//   expected.matrix[1][1] = 0.25;
-//   expected.matrix[1][2] = -0.125;
-
-//   expected.matrix[2][0] = -0.5;
-//   expected.matrix[2][1] = 0;
-//   expected.matrix[2][2] = 0.25;
-
-//   s21_print_matrix(m);
-//   matrix_t B = {0};
-//   s21_create_matrix(3, 3, &B);
-//   s21_inverse_matrix(&m, &B);
-//   int eq = s21_eq_matrix(&expected, &B);
-//   printf("eq = %d\n", eq);
-//   s21_print_matrix(B);
-//   s21_remove_matrix(&m);
-//   s21_remove_matrix(&B);
-//   return 0;
-// }
-
-void s21_print_matrix(matrix_t A) {
-  for (int i = 0; i < A.rows; i++) {
-    for (int j = 0; j < A.columns; j++) {
-      printf("%lf ", A.matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
 }

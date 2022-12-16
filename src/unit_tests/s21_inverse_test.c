@@ -50,7 +50,7 @@ END_TEST
 START_TEST(test_normal) {
   matrix_t m = {0};
   matrix_t expected = {0};
-  int codec1, codec2;
+  int codec1 = 0, codec2 = 0;
   codec1 = s21_create_matrix(3, 3, &m);
   if (!codec1) codec2 = s21_create_matrix(3, 3, &expected);
 
@@ -95,7 +95,7 @@ END_TEST
 START_TEST(test_normal_1) {
   matrix_t m = {0};
   matrix_t expected = {0};
-  int codec1, codec2;
+  int codec1 = 0, codec2 = 0;
   codec1 = s21_create_matrix(3, 3, &m);
   if (!codec1) codec2 = s21_create_matrix(3, 3, &expected);
 

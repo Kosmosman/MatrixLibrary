@@ -9,7 +9,7 @@
 #define CALCULATION_ERROR 2
 #define OK 0
 
-#include <check.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,0 +1,192 @@
+==1522== Memcheck, a memory error detector
+==1522== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1522== Using Valgrind-3.18.1-42b08ed5bd-20211015 and LibVEX; rerun with -h for copyright info
+==1522== Command: ./tests
+==1522== Parent PID: 1521
+==1522== 
+--1522-- 
+--1522-- Valgrind options:
+--1522--    --trace-children=yes
+--1522--    --track-fds=yes
+--1522--    --track-origins=yes
+--1522--    --leak-check=full
+--1522--    --show-leak-kinds=all
+--1522--    --verbose
+--1522--    --log-file=RESULT_VALGRIND.txt
+--1522-- Contents of /proc/version:
+--1522--   Linux version 5.10.76-linuxkit (root@buildkitsandbox) (gcc (Alpine 10.2.1_pre1) 10.2.1 20201203, GNU ld (GNU Binutils) 2.35.2) #1 SMP Mon Nov 8 10:21:19 UTC 2021
+--1522-- 
+--1522-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-sse3-ssse3-avx-avx2-bmi-f16c-rdrand
+--1522-- Page sizes: currently 4096, max supported 4096
+--1522-- Valgrind library directory: /usr/libexec/valgrind
+--1522-- Reading syms from /exchange/Project/C6_s21_matrix-0/src/tests
+--1522-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+--1522--   Considering /usr/lib/debug/.build-id/61/ef896a699bb1c2e4e231642b2e1688b2f1a61e.debug ..
+--1522--   .. build-id is valid
+--1522-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
+--1522--    object doesn't have a symbol table
+--1522--    object doesn't have a dynamic symbol table
+--1522-- Scheduler: using generic scheduler lock implementation.
+--1522-- Reading suppressions file: /usr/libexec/valgrind/default.supp
+==1522== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-1522-by-???-on-6cda447bd6f5
+==1522== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-1522-by-???-on-6cda447bd6f5
+==1522== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-1522-by-???-on-6cda447bd6f5
+==1522== 
+==1522== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==1522== don't want to do, unless you know exactly what you're doing,
+==1522== or are doing some strange experiment):
+==1522==   /usr/bin/vgdb --pid=1522 ...command...
+==1522== 
+==1522== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==1522==   /path/to/gdb ./tests
+==1522== and then give GDB the following command
+==1522==   target remote | /usr/bin/vgdb --pid=1522
+==1522== --pid is optional if only one valgrind process is running
+==1522== 
+--1522-- REDIR: 0x402aa60 (ld-linux-x86-64.so.2:strlen) redirected to 0x580bcec2 (???)
+--1522-- REDIR: 0x402a830 (ld-linux-x86-64.so.2:index) redirected to 0x580bcedc (???)
+--1522-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
+--1522--    object doesn't have a symbol table
+--1522-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+--1522--    object doesn't have a symbol table
+==1522== WARNING: new redirection conflicts with existing -- ignoring it
+--1522--     old: 0x0402aa60 (strlen              ) R-> (0000.0) 0x580bcec2 ???
+--1522--     new: 0x0402aa60 (strlen              ) R-> (2007.0) 0x0484ee30 strlen
+--1522-- REDIR: 0x4027240 (ld-linux-x86-64.so.2:strcmp) redirected to 0x484fcd0 (strcmp)
+--1522-- REDIR: 0x402afc0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853840 (mempcpy)
+--1522-- Reading syms from /usr/lib/x86_64-linux-gnu/libsubunit.so.0.0.0
+--1522--    object doesn't have a symbol table
+--1522-- Reading syms from /usr/lib/x86_64-linux-gnu/libm.so.6
+--1522--   Considering /usr/lib/debug/.build-id/27/e82301dba6c3f644404d504e1bb1c97894b433.debug ..
+--1522--   .. build-id is valid
+--1522-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
+--1522--   Considering /usr/lib/debug/.build-id/69/389d485a9793dbe873f0ea2c93e02efaa9aa3d.debug ..
+--1522--   .. build-id is valid
+==1522== WARNING: new redirection conflicts with existing -- ignoring it
+--1522--     old: 0x049f0ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1522--     new: 0x049f0ce0 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==1522== WARNING: new redirection conflicts with existing -- ignoring it
+--1522--     old: 0x049f0ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1522--     new: 0x049f0ce0 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+==1522== WARNING: new redirection conflicts with existing -- ignoring it
+--1522--     old: 0x049f0ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1522--     new: 0x049f0ce0 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==1522== WARNING: new redirection conflicts with existing -- ignoring it
+--1522--     old: 0x049f0ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1522--     new: 0x049f0ce0 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+--1522-- REDIR: 0x49f37a0 (libc.so.6:strnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3a60 (libc.so.6:strpbrk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3360 (libc.so.6:strcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x4a11d50 (libc.so.6:wcsnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4750 (libc.so.6:memset) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x4a105c0 (libc.so.6:wcslen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4c90 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x4a103f0 (libc.so.6:wcschr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f32e0 (libc.so.6:index) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f39e0 (libc.so.6:rindex) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4620 (libc.so.6:memmove) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+==1522== Preferring higher priority redirection:
+--1522--     old: 0x04aeb940 (__memcpy_avx_unalign) R-> (2018.0) 0x04850f90 __memcpy_avx_unaligned_erms
+--1522--     new: 0x04aeb940 (__memcpy_avx_unalign) R-> (2018.1) 0x04852880 memmove
+--1522-- REDIR: 0x4a10470 (libc.so.6:wcscmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4a60 (libc.so.6:stpncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x4a10a30 (libc.so.6:wmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f38b0 (libc.so.6:strncmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4af0 (libc.so.6:strcasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f34a0 (libc.so.6:strcspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x4a104f0 (libc.so.6:wcscpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3250 (libc.so.6:strcat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4be0 (libc.so.6:strncasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4500 (libc.so.6:bcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49fc5f0 (libc.so.6:memrchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f6090 (libc.so.6:strchrnul) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3410 (libc.so.6:strcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4b90 (libc.so.6:strcasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3720 (libc.so.6:strlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3950 (libc.so.6:strncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f49d0 (libc.so.6:stpcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4470 (libc.so.6:memchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f3b80 (libc.so.6:strspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4850 (libc.so.6:mempcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f4b40 (libc.so.6:strncasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x49f6000 (libc.so.6:rawmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1522-- REDIR: 0x4ae8790 (libc.so.6:__strrchr_avx2) redirected to 0x484e810 (rindex)
+--1522-- REDIR: 0x49f0120 (libc.so.6:malloc) redirected to 0x4848820 (malloc)
+--1522-- REDIR: 0x4ae8960 (libc.so.6:__strlen_avx2) redirected to 0x484ed10 (strlen)
+--1522-- REDIR: 0x4ae3f00 (libc.so.6:__strncmp_avx2) redirected to 0x484f3e0 (strncmp)
+--1522-- REDIR: 0x49f07c0 (libc.so.6:realloc) redirected to 0x484dc50 (realloc)
+--1522-- REDIR: 0x4ae8580 (libc.so.6:__strchrnul_avx2) redirected to 0x4853330 (strchrnul)
+--1522-- REDIR: 0x4ae3990 (libc.so.6:__strspn_sse42) redirected to 0x4853d50 (strspn)
+--1522-- REDIR: 0x49f0460 (libc.so.6:free) redirected to 0x484b210 (free)
+--1522-- REDIR: 0x4aeb900 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4853440 (mempcpy)
+--1522-- REDIR: 0x4aeb940 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852880 (memmove)
+--1522-- REDIR: 0x49f15a0 (libc.so.6:calloc) redirected to 0x484d9d0 (calloc)
+==1522== 
+==1522== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==1522== Open file descriptor 3: /exchange/Project/C6_s21_matrix-0/src/RESULT_VALGRIND.txt
+==1522==    <inherited from parent>
+==1522== 
+==1522== 
+==1522== HEAP SUMMARY:
+==1522==     in use at exit: 192 bytes in 8 blocks
+==1522==   total heap usage: 176,624 allocs, 176,616 frees, 71,493,373 bytes allocated
+==1522== 
+==1522== Searching for pointers to 8 not-freed blocks
+==1522== Checked 109,064 bytes
+==1522== 
+==1522== 72 bytes in 3 blocks are indirectly lost in loss record 1 of 4
+==1522==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1522==    by 0x10BA24: s21_create_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C381: s21_calc_complements (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C9B8: s21_inverse_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x110077: test_normal_fn (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115B20: tcase_run_tfun_nofork (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115FFE: srunner_run_tagged (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C97: run_testcase (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C0A: run_tests (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112D07: main (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522== 
+==1522== 72 bytes in 3 blocks are indirectly lost in loss record 2 of 4
+==1522==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1522==    by 0x10BA24: s21_create_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C381: s21_calc_complements (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C9B8: s21_inverse_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x11041A: test_normal_1_fn (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115B20: tcase_run_tfun_nofork (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115FFE: srunner_run_tagged (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C97: run_testcase (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C0A: run_tests (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112D07: main (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522== 
+==1522== 96 (24 direct, 72 indirect) bytes in 1 blocks are definitely lost in loss record 3 of 4
+==1522==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1522==    by 0x10B9D7: s21_create_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C381: s21_calc_complements (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C9B8: s21_inverse_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x110077: test_normal_fn (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115B20: tcase_run_tfun_nofork (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115FFE: srunner_run_tagged (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C97: run_testcase (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C0A: run_tests (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112D07: main (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522== 
+==1522== 96 (24 direct, 72 indirect) bytes in 1 blocks are definitely lost in loss record 4 of 4
+==1522==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1522==    by 0x10B9D7: s21_create_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C381: s21_calc_complements (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x10C9B8: s21_inverse_matrix (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x11041A: test_normal_1_fn (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115B20: tcase_run_tfun_nofork (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x115FFE: srunner_run_tagged (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C97: run_testcase (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112C0A: run_tests (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522==    by 0x112D07: main (in /exchange/Project/C6_s21_matrix-0/src/tests)
+==1522== 
+==1522== LEAK SUMMARY:
+==1522==    definitely lost: 48 bytes in 2 blocks
+==1522==    indirectly lost: 144 bytes in 6 blocks
+==1522==      possibly lost: 0 bytes in 0 blocks
+==1522==    still reachable: 0 bytes in 0 blocks
+==1522==         suppressed: 0 bytes in 0 blocks
+==1522== 
+==1522== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)

@@ -42,5 +42,7 @@ int s21_switch_rows(matrix_t *A, int row_1);
 void s21_decrease_matrix(matrix_t A, matrix_t *B, int row, int column);
 int s21_check_matrices_with_result(matrix_t A, matrix_t B, matrix_t *result,
                                    int row, int column);
+void s21_fill_zero_matrix(matrix_t *A);
+void s21_copy_matrix(matrix_t *A, matrix_t *B);
 
 #endif  // SRC_MATRIX_H

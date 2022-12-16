@@ -58,7 +58,7 @@ START_TEST(not_eq1) {
   const int rows1 = rand() % 100 + 1;
   const int cols1 = rand() % 100 + 1;
   s21_create_matrix(rows1, cols1, &mtx);
-  ck_assert_int_eq(s21_eq_matrix(&m, &mtx), INCORRECT_MATRIX);
+  ck_assert_int_eq(s21_eq_matrix(&m, &mtx), FAILURE);
   s21_remove_matrix(&m);
   s21_remove_matrix(&mtx);
 }

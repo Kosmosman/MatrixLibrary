@@ -64,8 +64,9 @@ START_TEST(test_normal) {
     expected.matrix[2][2] = 4;
 
     int code = s21_calc_complements(&m, &result);
+    int eq = s21_eq_matrix(&result, &expected);
 
-    ck_assert_int_eq(s21_eq_matrix(&result, &expected), SUCCESS);
+    ck_assert_int_eq(eq, SUCCESS);
     ck_assert_int_eq(code, OK);
     s21_remove_matrix(&m);
     s21_remove_matrix(&result);

@@ -1,3 +1,3 @@
-# s21_matrix  
+# Matrix  Library
 
 This library created for work with matrix.
